@@ -1,0 +1,8 @@
+{
+  "profiles": {
+    "Comtrade": {
+      "commandName": "Project",
+      "commandLineArgs": "top-exports -r 804"
+    }
+  }
+}
