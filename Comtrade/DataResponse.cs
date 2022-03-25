@@ -27,6 +27,27 @@ namespace Comtrade
 
     public class DataResponse
     {
+        public ResponseValidation Validation { get; set; }
+
+        public class ResponseValidation
+        {
+            public ValidationStatus Status { get; set; }
+            public string Message { get; set; }
+
+            public override string ToString()
+                => $"{Status} {Message}";
+
+            public class ValidationStatus
+            {
+                public string Name { get; set; }
+                public int Value { get; set; }
+                public string Description { get; set; }
+
+                public override string ToString()
+                    => $"{Value}: {Name} - {Description}";
+            }
+        }
+
         [JsonPropertyName("dataset")]
         public IList<DataResult> Results { get; set; }
     }
@@ -89,8 +110,8 @@ namespace Comtrade
 
     public static class DataResponseExtensions
     {
-        public static DataShares<DataResult> AsTradeValueShares(this DataResponse response, string totalName)
-            => DataShares.Create(response.Results, d => d.TradeValue, totalName);
+        public static DataShares<DataResult> AsTradeValueShares(this IEnumerable<DataResult> results, string totalName)
+            => DataShares.Create(results, d => d.TradeValue, totalName);
 
         public static DataShare<DataResult> GetReporter(this DataShares<DataResult> all, int reporter)
             => all.SingleOrDefault(s => s.Data.ReporterCode == reporter);

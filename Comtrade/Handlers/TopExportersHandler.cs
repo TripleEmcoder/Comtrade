@@ -23,8 +23,8 @@ namespace Comtrade.Handlers
             };
 
             var topExportersOfCommodityQuery = (await comtrade.Data(allExportersOfCommodityQuery, cancellationToken))
-                .AsTradeValueShares("WLD")
-                .Where(s => s.Share >= 0.05)
+                .Results.AsTradeValueShares("WLD")
+                .Where(s => s.Share >= minShare)
                 .OrderByDescending(s => s.Value)
                 .ToList();
 
@@ -39,7 +39,7 @@ namespace Comtrade.Handlers
                 };
 
                 var topExporterPartners = (await comtrade.Data(topExporterPartnersQuery, cancellationToken))
-                    .AsTradeValueShares(topExporterPartnersQuery.ToShortString())
+                    .Results.AsTradeValueShares(topExporterPartnersQuery.ToShortString())
                     .Where(s => s.Share >= 0.05)
                     .OrderByDescending(s => s.Value);
 
@@ -54,7 +54,7 @@ namespace Comtrade.Handlers
                     };
 
                     var topExporterAsPartOfAllTopPartnerImports = (await comtrade.Data(allImportsOfCommodityReportedByTopPartnerQuery, cancellationToken))
-                        .AsTradeValueShares(allImportsOfCommodityReportedByTopPartnerQuery.ToShortString())
+                        .Results.AsTradeValueShares(allImportsOfCommodityReportedByTopPartnerQuery.ToShortString())
                         .GetPartner(topExporter.Data.ReporterCode);
 
                     Console.WriteLine(topExporterAsPartOfAllTopPartnerImports);

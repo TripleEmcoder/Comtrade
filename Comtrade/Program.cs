@@ -37,6 +37,7 @@ namespace Comtrade
 
                     services.AddTransient<TopExportsHandler>();
                     services.AddTransient<TopExportersHandler>();
+                    services.AddTransient<TopDominatedHandler>();
                 });
         }
 
@@ -49,6 +50,7 @@ namespace Comtrade
                 BuildCommodities("commodities"),
                 BuildTopExports("top-exports"),
                 BuildTopExporters("top-exporters"),
+                BuildTopDominated("top-dominated"),
             });
 
         private static Command BuildSelect(string name, Func<ComtradeClient, CancellationToken, Task<ParameterResponse>> action)
@@ -119,6 +121,21 @@ namespace Comtrade
             command.Handler = CommandHandler.Create(
                 (IHost host, string x, string c, double m, CancellationToken cancellationToken)
                     => host.Services.GetRequiredService<TopExportersHandler>().Run(x, c, m, cancellationToken));
+
+            return command;
+        }
+
+        private static Command BuildTopDominated(string name)
+        {
+            var command = new Command(name)
+            {
+                new Option<string>(new[] {"-x", "--classification" }, () => "HS"),
+                new Option<double>(new[] {"-m", "--min-share" }, () => 0.1),
+            };
+
+            command.Handler = CommandHandler.Create(
+                (IHost host, string x, double m, CancellationToken cancellationToken)
+                    => host.Services.GetRequiredService<TopDominatedHandler>().Run(x, m, cancellationToken));
 
             return command;
         }

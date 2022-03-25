@@ -62,6 +62,11 @@ namespace Comtrade
         {
             var response = await GetFromCacheOrUpstream<DataResponse>(GetDataUri(query), cancellationToken);
 
+            if (response.Validation.Status.Value != 0)
+                throw new Exception(response.Validation.ToString());
+
+            await Task.Delay(TimeSpan.FromSeconds(1.1));
+
             if (query.Partner == null)
                 response.Results = response.Results.Where(r => r.PartnerCode != 0).ToList();
 

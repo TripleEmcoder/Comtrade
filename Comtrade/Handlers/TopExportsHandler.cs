@@ -23,7 +23,7 @@ namespace Comtrade.Handlers
             };
 
             var topExportedCommoditiesOfReporter = (await comtrade.Data(allExportedCommoditiesOfReporterQuery, cancellationToken))
-                .AsTradeValueShares(allExportedCommoditiesOfReporterQuery.ToShortString())
+                .Results.AsTradeValueShares(allExportedCommoditiesOfReporterQuery.ToShortString())
                 .Where(s => s.Share >= 0.05)
                 .OrderByDescending(s => s.Value)
                 .ToList();
@@ -39,7 +39,7 @@ namespace Comtrade.Handlers
                 };
 
                 var topCommodityAsPartOfWorldExports = (await comtrade.Data(topCommodityAsPartOfWorldExportsQuery, cancellationToken))
-                    .AsTradeValueShares(topCommodityAsPartOfWorldExportsQuery.ToShortString())
+                    .Results.AsTradeValueShares(topCommodityAsPartOfWorldExportsQuery.ToShortString())
                     .GetReporter(allExportedCommoditiesOfReporterQuery.Reporter.Value);
 
                 Console.WriteLine(topCommodityAsPartOfWorldExports);
@@ -51,7 +51,7 @@ namespace Comtrade.Handlers
                 };
 
                 var topCommodityPartners = (await comtrade.Data(topCommodityPartnersQuery, cancellationToken))
-                    .AsTradeValueShares(topCommodityPartnersQuery.ToShortString())
+                    .Results.AsTradeValueShares(topCommodityPartnersQuery.ToShortString())
                     .Where(s => s.Share >= 0.1)
                     .OrderByDescending(s => s.Value);
 
@@ -66,7 +66,7 @@ namespace Comtrade.Handlers
                     };
 
                     var topCommodityAsPartOfPartnerImports = (await comtrade.Data(allImportsOfTopCommodityReportedByPartnerQuery, cancellationToken))
-                        .AsTradeValueShares(allImportsOfTopCommodityReportedByPartnerQuery.ToShortString())
+                        .Results.AsTradeValueShares(allImportsOfTopCommodityReportedByPartnerQuery.ToShortString())
                         .GetPartner(allExportedCommoditiesOfReporterQuery.Reporter.Value);
 
                     Console.WriteLine(topCommodityAsPartOfPartnerImports);
